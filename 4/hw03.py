@@ -24,7 +24,14 @@ def num_eights(pos):
     ...       ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr', 'For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    # test case: 888 88 8
+def num_eights(pos):
+    if (pos % 10 == 8):
+        return num_eights(pos // 10) + 1
+    elif (pos > 0):
+        return num_eights(pos // 10)
+    else:
+        return 0
 
 
 def pingpong(n):
@@ -60,7 +67,34 @@ def pingpong(n):
     ...       ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    # index: 10 -> 6
+    # 10 ... 8, 9 
+    # 6  ... 8, 7
+
+    # 9 ... 7, 8
+    #   ... 7, 8
+
+    # def helper(m, inc, n):
+    #     val = 0
+    #     while (m <= n):
+    #         if inc:
+    #             val += 1
+    #         else:
+    #             val -= 1
+    #         if m % 8 == 0 or num_eights(m) > 0:
+    #             inc = not(inc)
+    #         m += 1
+    #     return val
+
+    def helper(m, inc, val):
+        if m == n:
+            return val
+        elif m % 8 == 0 or num_eights(m) > 0:
+            return helper(m + 1, -inc, val - inc)
+        else:
+            return helper(m + 1, inc, val + inc)
+            
+    return helper(1, 1, 1)
 
 
 def next_larger_coin(coin):
@@ -116,43 +150,15 @@ def count_coins(change):
     >>> check(HW_SOURCE_FILE, 'count_coins', ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
-
-
-anonymous = False  # Change to True if you would like to remain anonymous on the final leaderboard.
-
-
-def beaver(f):
-    "*** YOUR CODE HERE ***"
-    __________________
-
-
-def beaver_syntax_check():
-    """
-    Checks that definition of beaver is only one line.
-
-    >>> # You aren't expected to understand the code of this test.
-    >>> import inspect, ast
-    >>> source = inspect.getsource(beaver)
-    >>> num_comments = source.count('\\n    #')
-    >>> contains_default_line = '"*** YOUR CODE HERE ***"' in source
-    >>> num_lines = source.count('\\n') - num_comments
-    >>> (num_lines == 2) or (num_lines == 3 and contains_default_line)
-    True
-    """
-    # You don't need to edit this function. It's just here to check your work.
-
-
-def beaver_run_test():
-    """
-    Checks to make sure f gets called at least 1000 times.
-
-    >>> counter = 0
-    >>> def test():
-    ...     global counter
-    ...     counter += 1
-    >>> beaver(test)
-    >>> counter >= 1000
-    True
-    """
-    # You don't need to edit this function. It's just here to check your work.
+    # 1, 5, 10, 25
+    def helper(n = change, m = 25):
+        if n < m and m != 1:
+            return helper(n, next_smaller_coin(m))
+        else:
+            if n == 0:
+                return 1
+            elif m == 1:
+                return 1
+            else:
+                return helper(n - m, m) + helper(n, next_smaller_coin(m))
+    return helper(change)
