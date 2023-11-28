@@ -305,7 +305,7 @@ def preorder(t):
     [2, 4, 6]
     """
     if is_leaf(t):
-        return flatten([label(t)])
+        return [label(t)]
     return flatten([label(t)] + [preorder(b) for b in branches(t)])
         
 
@@ -345,7 +345,19 @@ def add_trees(t1, t2):
         5
       5
     """
-    "*** YOUR CODE HERE ***"
+    if not t1:
+        return t2
+    if not t2:
+        return t1
+    label_sum = label(t1) + label(t2)
+    bs1, bs2 = branches(t1), branches(t2)
+    len1, len2 = len(bs1), len(bs2)
+    # prevents list comprehension quitting from index out of bounds
+    if len1 < len2:
+        bs1 += [None for _ in range(len1, len2)]
+    elif len1 > len2:
+        bs2 += [None for _ in range(len2, len1)]        
+    return tree(label_sum, [add_trees(b1, b2) for b1, b2 in zip(bs1, bs2)])
 
 
 def change_abstraction(change):
